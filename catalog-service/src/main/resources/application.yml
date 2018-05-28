@@ -1,0 +1,53 @@
+spring:
+  profiles:
+    active: development
+---
+spring:
+  profiles: development
+  datasource:
+      url: jdbc:h2:mem:app_db;DB_CLOSE_ON_EXIT=FALSE
+      username: sa
+      password:
+  jpa:
+    database: H2
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+---
+spring:
+  profiles: docker
+  redis:
+    host: redis
+    port: 6379
+  datasource:
+    url: jdbc:mysql://mysql:3306/dev?useSSL=false
+    username: root
+    password: dbpass
+    initialize: true
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/
+---
+spring:
+  profiles: test
+  redis:
+    host: localhost
+    port: 6379
+  jpa:
+    database: H2
+  datasource:
+    initialize: false

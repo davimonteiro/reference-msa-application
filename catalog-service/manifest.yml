@@ -1,0 +1,17 @@
+---
+applications:
+- name: catalog-service
+  memory: 1024MB
+  instances: 1
+  host: catalog-service-${random-word}
+  path: target/catalog-service-0.0.1-SNAPSHOT.jar
+  env:
+    SPRING_PROFILES_ACTIVE: cloud
+    DEBUG: "true"
+    debug: "true"
+  services:
+   - discovery-service
+   - config-service
+   - catalog-db
+   - catalog-redis
+   - user-service

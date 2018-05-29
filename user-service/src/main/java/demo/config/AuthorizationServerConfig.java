@@ -12,16 +12,18 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @Configuration
 public class AuthorizationServerConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String CLIENT_ID = "acme";
+    public static final String CLIENT_SECRET = "acmesecret";
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
+        auth.inMemoryAuthentication()
                 .withUser("user").password("password").roles("USER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+            http
                 .authorizeRequests()
                 .antMatchers("/resources/**").permitAll()
                 .anyRequest().authenticated()
@@ -43,8 +45,8 @@ public class AuthorizationServerConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients.inMemory()
-                    .withClient("acme")
-                    .secret("acmesecret")
+                    .withClient(CLIENT_ID)
+                    .secret(CLIENT_SECRET)
                     .autoApprove(true)
                     .autoApprove("true")
                     .authorizedGrantTypes("authorization_code", "refresh_token", "password")

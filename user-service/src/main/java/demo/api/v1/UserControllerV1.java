@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.Optional;
 
+import static java.util.Optional.*;
+
 @RestController
 @RequestMapping(path = "/v1")
 public class UserControllerV1 {
@@ -24,7 +26,7 @@ public class UserControllerV1 {
         if (principal != null) {
             user = userService.getUserByUsername(principal.getName());
         }
-        return Optional.ofNullable(user)
+        return ofNullable(user)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }

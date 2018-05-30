@@ -1,3 +1,4 @@
+/*
 package demo.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -12,4 +13,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/oauth/confirm_access").setViewName("authorize");
     }
+
 }
+*/

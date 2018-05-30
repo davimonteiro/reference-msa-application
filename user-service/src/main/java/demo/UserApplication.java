@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
-import org.springframework.stereotype.Component;
+//import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+//import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+//import org.springframework.stereotype.Component;
 
 /**
  * The {@link UserApplication} is a cloud-native Spring Boot application that manages
@@ -31,7 +31,6 @@ public class UserApplication {
         SpringApplication.run(UserApplication.class, args);
     }
 
-
     @Bean
     @Profile({"docker", "cloud", "development"})
     CommandLineRunner commandLineRunner(DatabaseInitializer databaseInitializer) {
@@ -41,12 +40,13 @@ public class UserApplication {
         };
     }
 
-    @Component
+    /*@Component
     public static class CustomizedRestMvcConfiguration extends RepositoryRestConfigurerAdapter {
 
         @Override
         public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
             config.setBasePath("/api");
         }
-    }
+
+    }*/
 }

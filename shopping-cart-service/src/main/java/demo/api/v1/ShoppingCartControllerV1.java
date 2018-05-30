@@ -3,12 +3,13 @@ package demo.api.v1;
 import demo.cart.CartEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static java.util.Optional.ofNullable;
-import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping(path = "/v1")
@@ -20,35 +21,35 @@ public class ShoppingCartControllerV1 {
     @RequestMapping(path = "/events", method = POST)
     public ResponseEntity addCartEvent(@RequestBody CartEvent cartEvent) throws Exception {
         return ofNullable(shoppingCartService.addCartEvent(cartEvent))
-                .map(event -> noContent().build())
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new Exception("Could not find shopping cart"));
     }
 
     @RequestMapping(path = "/checkout", method = POST)
     public ResponseEntity checkoutCart() throws Exception {
         return ofNullable(shoppingCartService.checkout())
-                .map(checkoutResult -> ok(checkoutResult))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new Exception("Could not checkout"));
     }
 
     @RequestMapping(path = "/cart", method = GET)
     public ResponseEntity getCart() throws Exception {
         return ofNullable(shoppingCartService.getShoppingCart())
-                .map(cart -> ok(cart))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new Exception("Could not find shopping cart"));
     }
 
     @RequestMapping(path = "/cart/orchestrated", method = GET)
     public ResponseEntity getCartOrchestrated() throws Exception {
         return ofNullable(shoppingCartService.getShoppingCartOrchestrated())
-                .map(shoppingCart -> ok(shoppingCart))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new Exception("Could not find shopping cart"));
     }
 
     @RequestMapping(path = "/cart/clear/orchestrated", method = POST)
     public ResponseEntity clearShoppingCart() throws Exception {
         return ofNullable(shoppingCartService.clearShoppingCart())
-                .map(result -> ok(result))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new Exception("Could not clear shopping cart"));
     }
 

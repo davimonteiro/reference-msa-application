@@ -1,6 +1,7 @@
 package demo.api.v1;
 
-import demo.beethoven.BeethovenCommand;
+import demo.beethoven.BeethovenOperation;
+import demo.beethoven.ContextualInput;
 import demo.cart.CartEvent;
 import demo.cart.ShoppingCart;
 import demo.domain.*;
@@ -18,14 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static demo.beethoven.BeethovenCommand.*;
-import static demo.beethoven.BeethovenCommand.CommandOperation.START_WORKFLOW;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
@@ -165,8 +162,8 @@ public class ShoppingCartServiceV1 {
         Inventory[] inventory =
                 oAuth2RestTemplate.getForObject(String.format("http://inventory-service/v1/inventory?productIds=%s",
                         shoppingCart.getLineItems().stream()
-                        .map(LineItem::getProductId)
-                        .collect(Collectors.joining(","))), Inventory[].class);
+                                .map(LineItem::getProductId)
+                                .collect(Collectors.joining(","))), Inventory[].class);
 
         Map<String, Long> inventoryItems = Arrays.asList(inventory)
                 .stream()
@@ -183,22 +180,22 @@ public class ShoppingCartServiceV1 {
         Order order = createOrder(shoppingCart);
         createSuccessfulOrderEvent(order);
         clearShoppingCart();
-
-        *//*OAuth2AccessToken accessToken = oAuth2RestTemplate.getAccessToken();
-        if (accessToken != null) {
-            restTemplate.postForEntity("http://beethoven-service/api/workflows/start", accessToken, OAuth2AccessToken.class);
-            return null;
-        }*//*
     }*/
 
+    public CheckoutResult checkoutOrchestrated() {
+        OAuth2AccessToken accessToken = oAuth2RestTemplate.getAccessToken();
+        Set<ContextualInput> inputs = new HashSet<>();
+        inputs.add(new ContextualInput("${access_token}", accessToken.getTokenType() + " " + accessToken.getValue()));
 
-    public void beethovenCheckout() {
-        BeethovenCommand beethovenCommand = new BeethovenCommand();
-        beethovenCommand.setWorkflowName("checkoutProcess");
-        beethovenCommand.setOperation(START_WORKFLOW);
+        BeethovenOperation beethovenOperation = new BeethovenOperation();
+        beethovenOperation.setWorkflowName("checkoutProcess");
+        beethovenOperation.setOperation(BeethovenOperation.Operation.SCHEDULE.getId());
+        beethovenOperation.setInputs(inputs);
 
-        restTemplate.postForEntity("http://beethoven-service/api/workflows/checkoutProcess/commands",
-                beethovenCommand, BeethovenCommand.class);
+        restTemplate.postForEntity("http://beethoven-service/api/workflows/checkoutProcess/operations",
+                beethovenOperation, BeethovenOperation.class);
+
+        return new CheckoutResult();
     }
 
     /**

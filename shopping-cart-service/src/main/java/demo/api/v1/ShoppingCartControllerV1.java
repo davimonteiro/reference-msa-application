@@ -32,6 +32,13 @@ public class ShoppingCartControllerV1 {
                 .orElseThrow(() -> new Exception("Could not checkout"));
     }
 
+    @RequestMapping(path = "/checkout/orchestrated", method = POST)
+    public ResponseEntity checkoutCartOrchestrated() throws Exception {
+        return ofNullable(shoppingCartService.checkoutOrchestrated())
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new Exception("Could not checkout"));
+    }
+
     @RequestMapping(path = "/cart", method = GET)
     public ResponseEntity getCart() throws Exception {
         return ofNullable(shoppingCartService.getShoppingCart())

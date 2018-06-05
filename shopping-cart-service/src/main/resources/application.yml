@@ -12,6 +12,8 @@ security:
       client-id: acme
   enable-csrf: false
 ---
+server:
+  port: 8957
 spring:
   profiles: development
   datasource:

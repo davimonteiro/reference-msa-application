@@ -50,7 +50,6 @@ security:
   oauth2:
     resource:
       userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
-  ignored: /catalog/**
 eureka:
   instance:
     prefer-ip-address: true

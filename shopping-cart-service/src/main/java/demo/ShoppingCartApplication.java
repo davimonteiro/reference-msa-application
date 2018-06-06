@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -33,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableResourceServer
 @EnableOAuth2Client
 @EnableHystrix
+@EnableTransactionManagement
 public class ShoppingCartApplication {
     public static void main(String[] args) {
         SpringApplication.run(ShoppingCartApplication.class, args);

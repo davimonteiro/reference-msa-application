@@ -17,7 +17,7 @@ public class UserService {
 
         User result = null;
 
-        if (!userRepository.exists(user.getId())) {
+        if (!userRepository.existsById(user.getId())) {
             result = this.userRepository.save(user);
         }
 
@@ -26,7 +26,7 @@ public class UserService {
 
     @Cacheable(value = "user")
     public User getUser(String id) {
-        return this.userRepository.findOne(id);
+        return this.userRepository.findById(id).get();
     }
 
     @CachePut(value = "user", key = "#id")
@@ -34,7 +34,7 @@ public class UserService {
 
         User result = null;
 
-        if (userRepository.exists(user.getId())) {
+        if (userRepository.existsById(user.getId())) {
             result = this.userRepository.save(user);
         }
 
@@ -46,8 +46,8 @@ public class UserService {
 
         boolean deleted = false;
 
-        if (userRepository.exists(id)) {
-            this.userRepository.delete(id);
+        if (userRepository.existsById(id)) {
+            this.userRepository.deleteById(id);
             deleted = true;
         }
 

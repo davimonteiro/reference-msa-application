@@ -16,7 +16,6 @@ zuul:
       path: /user/**
       url: http://localhost:8181/uaa/user
 security:
-  enable-csrf: false
   oauth2:
     resource:
       userInfoUri: http://localhost:8181/uaa/user
@@ -25,7 +24,6 @@ security:
       userAuthorizationUri: http://localhost:8181/uaa/oauth/authorize
       clientId: acme
       clientSecret: acmesecret
-  ignored: /assets/**
 eureka:
   instance:
     non-secure-port: 8787
@@ -50,7 +48,6 @@ zuul:
       path: /user/**
       url: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
 security:
-  enable-csrf: false
   oauth2:
     resource:
       userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user

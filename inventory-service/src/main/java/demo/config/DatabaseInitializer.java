@@ -3,31 +3,33 @@ package demo.config;
 import demo.domain.*;
 import demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
 public class DatabaseInitializer {
 
-    @Autowired private ProductRepository productRepository;
-    @Autowired private ShipmentRepository shipmentRepository;
-    @Autowired private WarehouseRepository warehouseRepository;
-    @Autowired private AddressRepository addressRepository;
-    @Autowired private CatalogRepository catalogRepository;
-    @Autowired private InventoryRepository inventoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private ShipmentRepository shipmentRepository;
+    @Autowired
+    private WarehouseRepository warehouseRepository;
+    @Autowired
+    private AddressRepository addressRepository;
+    @Autowired
+    private CatalogRepository catalogRepository;
+    @Autowired
+    private InventoryRepository inventoryRepository;
 
 
     public void populate() throws Exception {
         Warehouse warehouse = new Warehouse("Pivotal SF");
 
-        List<Product> products = Arrays.asList(
+        List<Product> products = new ArrayList<>(Arrays.asList(
 
                 new Product("Best. Cloud. Ever. (T-Shirt, Men's Large)", "SKU-24642", "<p>Do you love your cloud platform? " +
                         "Do you push code continuously into production on a daily basis? " +
@@ -55,9 +57,7 @@ public class DatabaseInitializer {
                                 "With this stylish Cloud Foundry hoodie you can push code to the cloud all day while staying " +
                                 "comfortable and casual. <br /><br />&nbsp; <strong>Cloud Native PaaS Collection</strong><br />" +
                                 "&nbsp; 10% cloud stuff, 90% platform nylon<br />&nbsp; Cloud wash safe<br />" +
-                                "&nbsp; Five nines of <em>comfortability</em></p>", 21.99))
-                .stream()
-                .collect(Collectors.toList());
+                                "&nbsp; Five nines of <em>comfortability</em></p>", 21.99)));
 
         //productRepository.save(products);
         Catalog catalog = new Catalog();
@@ -73,7 +73,7 @@ public class DatabaseInitializer {
                 "CA", "Mountain View", "United States", 94043);
 
         // Save the addresses
-        addressRepository.save(Arrays.asList(warehouseAddress, shipToAddress));
+        addressRepository.saveAll(Arrays.asList(warehouseAddress, shipToAddress));
         warehouse.setAddress(warehouseAddress);
         warehouse = warehouseRepository.save(warehouse);
         Warehouse finalWarehouse = warehouse;
@@ -85,11 +85,11 @@ public class DatabaseInitializer {
                         .collect(Collectors.joining("")), a, finalWarehouse, Inventory.InventoryStatus.IN_STOCK))
                 .collect(Collectors.toSet());
 
-        inventoryRepository.save(inventories);
+        inventoryRepository.saveAll(inventories);
 
         // Generate 10 extra inventory for each product
         for (int i = 0; i < 10; i++) {
-            inventoryRepository.save(products.stream()
+            inventoryRepository.saveAll(products.stream()
                     .map(a -> new Inventory(IntStream.range(0, 9)
                             .mapToObj(x -> Integer.toString(new Random().nextInt(9)))
                             .collect(Collectors.joining("")), a, finalWarehouse, Inventory.InventoryStatus.IN_STOCK))

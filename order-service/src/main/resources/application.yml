@@ -22,7 +22,6 @@ security:
       userInfoUri: http://localhost:8181/uaa/user
     client:
       client-id: acme
-  ignored: /api/**
 eureka:
   instance:
     prefer-ip-address: true

@@ -16,12 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -118,8 +120,9 @@ public class ShoppingCartServiceV1 {
      * @return a shopping cart representing the aggregate state of the user's cart
      * @throws Exception
      */
+    @Transactional
     public ShoppingCart aggregateCartEvents(User user, Catalog catalog) throws Exception {
-        Flux<CartEvent> cartEvents = Flux.fromStream(cartEventRepository.findByUserId(user.getId()));
+        Flux<CartEvent> cartEvents = Flux.fromStream((cartEventRepository.findByUserId(user.getId()).stream()));
 
         // Aggregate the state of the shopping cart
         ShoppingCart shoppingCart = cartEvents

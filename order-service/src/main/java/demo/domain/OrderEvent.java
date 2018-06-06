@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class OrderEvent implements Serializable {
 
     @Id @GeneratedValue
-    private String id;
+    private Long id;
     @Enumerated(EnumType.ORDINAL)
     private OrderEventType type;
     private Long orderId;

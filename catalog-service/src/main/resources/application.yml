@@ -32,7 +32,6 @@ spring:
     url: jdbc:mysql://mysql:3306/dev?useSSL=false
     username: root
     password: dbpass
-    initialize: true
 eureka:
   instance:
     prefer-ip-address: true
@@ -49,5 +48,3 @@ spring:
     port: 6379
   jpa:
     database: H2
-  datasource:
-    initialize: false

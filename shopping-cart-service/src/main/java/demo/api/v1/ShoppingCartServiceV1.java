@@ -2,12 +2,17 @@ package demo.api.v1;
 
 import demo.beethoven.BeethovenOperation;
 import demo.beethoven.ContextualInput;
+import demo.beethoven.WorkflowInstance;
 import demo.cart.CartEvent;
 import demo.cart.ShoppingCart;
 import demo.domain.*;
 import demo.order.Order;
 import demo.order.OrderEvent;
 import demo.repository.CartEventRepository;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +25,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,6 +60,10 @@ public class ShoppingCartServiceV1 {
     private OAuth2RestTemplate oAuth2RestTemplate;
     private CartEventRepository cartEventRepository;
     private RestTemplate restTemplate;
+
+    // TODO Remove
+    private static final String REPORT_CSV_FILE = "/Users/davimonteiro/Desktop/report_original.csv";
+    private final AtomicInteger count = new AtomicInteger();
 
     @Autowired
     public ShoppingCartServiceV1(CartEventRepository cartEventRepository,
@@ -185,6 +203,7 @@ public class ShoppingCartServiceV1 {
         clearShoppingCart();
     }*/
 
+
     public CheckoutResult checkoutOrchestrated() {
         OAuth2AccessToken accessToken = oAuth2RestTemplate.getAccessToken();
         Set<ContextualInput> inputs = new HashSet<>();
@@ -207,6 +226,10 @@ public class ShoppingCartServiceV1 {
      * @return the result of the checkout operation
      */
     public CheckoutResult checkout() throws Exception {
+        WorkflowInstance workflowInstance = new WorkflowInstance();
+        workflowInstance.setWorkflowName("checkoutProcess");
+        workflowInstance.setWorkflowInstanceName("checkoutProcess-" + count.getAndIncrement());
+        workflowInstance.setStartTime(LocalDateTime.now());
 
         CheckoutResult checkoutResult = new CheckoutResult();
 
@@ -264,6 +287,10 @@ public class ShoppingCartServiceV1 {
             }
         }
 
+        workflowInstance.setEndTime(LocalDateTime.now());
+        workflowInstance.setSuccessful(checkoutResult.getOrder() != null);
+        reportToCsv(workflowInstance);
+
         // Return errors with available inventory
         return checkoutResult;
     }
@@ -314,6 +341,25 @@ public class ShoppingCartServiceV1 {
 
         }
         return hasInventory;
+    }
+
+    private void reportToCsv(WorkflowInstance workflowInstance) {
+        try (
+                BufferedWriter writer = Files.newBufferedWriter(
+                        Paths.get(REPORT_CSV_FILE),
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.APPEND);
+                CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)
+        ) {
+            csvPrinter.printRecord(Arrays.asList(
+                    workflowInstance.getWorkflowName(),
+                    workflowInstance.getWorkflowInstanceName(),
+                    workflowInstance.elapsedTime().toMillis(),
+                    workflowInstance.isSuccessful()));
+            csvPrinter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

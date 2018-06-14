@@ -87,8 +87,8 @@ public class DatabaseInitializer {
 
         inventoryRepository.saveAll(inventories);
 
-        // Generate 10 extra inventory for each product
-        for (int i = 0; i < 10; i++) {
+        // Generate 10000 extra inventory for each product
+        for (int i = 0; i < 10000; i++) {
             inventoryRepository.saveAll(products.stream()
                     .map(a -> new Inventory(IntStream.range(0, 9)
                             .mapToObj(x -> Integer.toString(new Random().nextInt(9)))

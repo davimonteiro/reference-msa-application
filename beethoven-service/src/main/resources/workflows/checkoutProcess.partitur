@@ -5,17 +5,20 @@ workflow checkoutProcess {
 	}
 	task checkAvailableInventory {
 		post("http://inventory-service/v1/inventory/checkavailable/orchestrated")
+		    .header("Content-Type", "application/json")
 		    .header("Authorization", "${access_token}")
 			.body("${getShoppingCart.response}")
 	}
 	task createNewOrder {
 		post("http://order-service/v1/orders/orchestrated")
+		    .header("Content-Type", "application/json")
 		    .header("Authorization", "${access_token}")
 			.body("${checkAvailableInventory.response}")
 	}
 	task createSuccessfulOrderEvent {
-		post("http://order-service/v1/orders/orchestrated")
-		    .header("Authorization", "${access_token}")
+		post("http://order-service/v1/orders/events/orchestrated")
+		    .header("Content-Type", "application/json")
+            .header("Authorization", "${access_token}")
 			.body("${createNewOrder.response}")
 	}
 	task clearShoppingCart {

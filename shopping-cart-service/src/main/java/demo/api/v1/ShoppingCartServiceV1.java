@@ -9,8 +9,6 @@ import demo.domain.*;
 import demo.order.Order;
 import demo.order.OrderEvent;
 import demo.repository.CartEventRepository;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.logging.Log;
@@ -30,14 +28,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -158,52 +153,6 @@ public class ShoppingCartServiceV1 {
         return addCartEvent(new CartEvent(CartEvent.CartEventType.CHECKOUT, user.getId()), user);
     }
 
-    public void createSuccessfulOrderEvent(Order order) {
-        oAuth2RestTemplate.postForEntity(String.format("http://order-service/v1/orders/%s/events", order.getId()),
-                new OrderEvent(OrderEvent.OrderEventType.CREATED, order.getId()), ResponseEntity.class);
-    }
-
-    public Order createOrder(ShoppingCart shoppingCart) throws Exception {
-        // Create a new order
-        Order orderResponse = oAuth2RestTemplate.postForObject("http://order-service/v1/orders",
-                shoppingCart.getLineItems().stream()
-                        .map(prd ->
-                                new demo.order.LineItem(prd.getProduct().getName(),
-                                        prd.getProductId(), prd.getQuantity(),
-                                        prd.getProduct().getUnitPrice(), TAX))
-                        .collect(Collectors.toList()),
-                Order.class);
-
-        return orderResponse;
-    }
-
-
-    public Map<String, Long> getInventory(ShoppingCart shoppingCart) throws Exception {
-        // Reconcile the current cart with the available inventory
-        Inventory[] inventory =
-                oAuth2RestTemplate.getForObject(String.format("http://inventory-service/v1/inventory?productIds=%s",
-                        shoppingCart.getLineItems().stream()
-                                .map(LineItem::getProductId)
-                                .collect(Collectors.joining(","))), Inventory[].class);
-
-        Map<String, Long> inventoryItems = Arrays.asList(inventory)
-                .stream()
-                .map(inv -> inv.getProduct().getProductId())
-                .collect(groupingBy(Function.identity(), counting()));
-
-        return inventoryItems;
-    }
-
-    /*public void checkoutOrchestrated() throws Exception {
-        ShoppingCart shoppingCart = getShoppingCart(); // OK
-        Map<String, Long> inventory = getInventory(shoppingCart); // OK
-        checkAvailableInventory(shoppingCart, inventory); // Here
-        Order order = createOrder(shoppingCart);
-        createSuccessfulOrderEvent(order);
-        clearShoppingCart();
-    }*/
-
-
     public CheckoutResult checkoutOrchestrated() {
         OAuth2AccessToken accessToken = oAuth2RestTemplate.getAccessToken();
         Set<ContextualInput> inputs = new HashSet<>();
@@ -316,29 +265,6 @@ public class ShoppingCartServiceV1 {
             }
         } catch (Exception e) {
             log.error("Error checking for available inventory", e);
-        }
-        return hasInventory;
-    }
-
-
-    public Boolean checkAvailableInventory(ShoppingCart currentCart, Map<String, Long> inventoryItems) throws Exception {
-        Boolean hasInventory = true;
-        // Determine if inventory is available
-        List<LineItem> inventoryAvailable = currentCart.getLineItems()
-                .stream()
-                .filter(item -> inventoryItems.get(item.getProductId()) - item.getQuantity() < 0)
-                .collect(Collectors.toList());
-        if (inventoryAvailable.size() > 0) {
-            String productIdList = inventoryAvailable
-                    .stream()
-                    .map(LineItem::getProductId)
-                    .collect(Collectors.joining(", "));
-
-            hasInventory = false;
-
-            throw new Exception(String.format("Insufficient inventory available for %s. " +
-                    "Lower the quantity of these products and try again.", productIdList));
-
         }
         return hasInventory;
     }

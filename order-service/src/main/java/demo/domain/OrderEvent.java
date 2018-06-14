@@ -19,6 +19,11 @@ public class OrderEvent implements Serializable {
 
     public OrderEvent() { }
 
+    public OrderEvent(Order order) {
+        this.orderId = order.getId();
+        this.type = OrderEventType.PURCHASED;
+    }
+
     public OrderEvent(OrderEventType type) {
         this.type = type;
     }

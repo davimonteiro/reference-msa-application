@@ -13,7 +13,6 @@ import reactor.core.publisher.Flux;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,6 +69,20 @@ public class OrderServiceV1 {
         orderEventRepository.save(orderEvent);
 
         return true;
+    }
+
+
+    public OrderEvent addOrderEvent(Order order, Boolean validate) throws Exception {
+        // Get the order for the event
+
+        if (validate) {
+            // Validate the account number of the event's order belongs to the user
+            validateAccountNumber(order.getAccountNumber());
+        }
+
+        // Save the order event
+        OrderEvent orderEvent = new OrderEvent(order);
+        return orderEventRepository.save(orderEvent);
     }
 
     public Order getOrder(Long orderId, Boolean validate) {

@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextListener;
 
 @EnableJpaRepositories
 @EnableJpaAuditing
@@ -56,5 +57,10 @@ public class OrderApplication {
         public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
             config.setBasePath("/api");
         }
+    }
+
+    @Bean
+    public RequestContextListener requestContextListener() {
+        return new RequestContextListener();
     }
 }

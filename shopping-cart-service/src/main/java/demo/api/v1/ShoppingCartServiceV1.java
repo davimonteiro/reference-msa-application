@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
@@ -223,7 +222,7 @@ public class ShoppingCartServiceV1 {
 
                         // Add order event
                         oAuth2RestTemplate.postForEntity(String.format("http://order-service/v1/orders/%s/events", orderResponse.getId()),
-                                new OrderEvent(OrderEvent.OrderEventType.CREATED, orderResponse.getId()), ResponseEntity.class);
+                                new OrderEvent(OrderEvent.OrderEventType.CREATED, orderResponse.getId()), OrderEvent.class);
 
                         checkoutResult.setOrder(orderResponse);
                     }
@@ -280,6 +279,8 @@ public class ShoppingCartServiceV1 {
             csvPrinter.printRecord(Arrays.asList(
                     workflowInstance.getWorkflowName(),
                     workflowInstance.getWorkflowInstanceName(),
+                    workflowInstance.getStartTime().toString(),
+                    workflowInstance.getEndTime().toString(),
                     workflowInstance.elapsedTime().toMillis(),
                     workflowInstance.isSuccessful()));
             csvPrinter.flush();

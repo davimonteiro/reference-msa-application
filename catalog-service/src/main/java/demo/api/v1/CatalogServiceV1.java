@@ -28,23 +28,19 @@ public class CatalogServiceV1 {
     public Catalog getCatalog() {
         CatalogInfo activeCatalog = catalogInfoRepository.findCatalogByActive(true);
 
-        /*Catalog catalog = restTemplate.getForObject(String.format("http://inventory-service/api/catalogs/search/findCatalogByCatalogNumber?catalogNumber=%s",
-                activeCatalog.getCatalogId()), Catalog.class);*/
-
-        Catalog catalog = restTemplate.getForObject(String.format("http://inventory-service/v1/catalogs/%s",
-                activeCatalog.getCatalogId()), Catalog.class);
-
-
-        /*ProductsResource products = restTemplate.getForObject(String.format("http://inventory-service/api/catalogs/%s/products",
-                catalog.getId()), ProductsResource.class);
-        catalog.setProducts(products.getContent().stream().collect(Collectors.toSet()));*/
+        Catalog catalog = restTemplate.getForObject(
+                String.format("http://inventory-service/v1/catalogs/%s",
+                activeCatalog.getCatalogId()),
+                Catalog.class);
 
         return catalog;
     }
 
     @HystrixCommand
     public Product getProduct(String productId) {
-        return restTemplate.getForObject(String.format("http://inventory-service/v1/products/%s",
-                productId), Product.class);
+        return restTemplate.getForObject(
+                String.format("http://inventory-service/v1/products/%s",
+                productId),
+                Product.class);
     }
 }

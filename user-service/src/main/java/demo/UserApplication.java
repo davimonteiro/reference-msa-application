@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-//import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-//import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
-//import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * The {@link UserApplication} is a cloud-native Spring Boot application that manages
@@ -26,6 +24,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 @EnableEurekaClient
 @EnableHystrix
+@EnableTransactionManagement
 public class UserApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserApplication.class, args);
@@ -39,14 +38,4 @@ public class UserApplication {
             databaseInitializer.populate();
         };
     }
-
-    /*@Component
-    public static class CustomizedRestMvcConfiguration extends RepositoryRestConfigurerAdapter {
-
-        @Override
-        public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-            config.setBasePath("/api");
-        }
-
-    }*/
 }

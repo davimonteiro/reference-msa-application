@@ -56,7 +56,7 @@ public class OrderServiceV1 {
         return newOrder;
     }
 
-    public Boolean addOrderEvent(OrderEvent orderEvent, Boolean validate) throws Exception {
+    public OrderEvent addOrderEvent(OrderEvent orderEvent, Boolean validate) throws Exception {
         // Get the order for the event
         Order order = orderRepository.findById(orderEvent.getOrderId()).get();
 
@@ -66,9 +66,7 @@ public class OrderServiceV1 {
         }
 
         // Save the order event
-        orderEventRepository.save(orderEvent);
-
-        return true;
+        return orderEventRepository.save(orderEvent);
     }
 
 

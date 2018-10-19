@@ -1,36 +1,52 @@
 spring:
   profiles:
     active: development
+
 ---
 server:
-  port: 8181
   servlet:
     context-path: /uaa
-logging.level.org.springframework.security: DEBUG
 spring:
-  profiles: development
-  datasource:
-        url: jdbc:h2:mem:app_db;DB_CLOSE_ON_EXIT=FALSE
-        username: sa
-        password:
-  jpa:
-    database: H2
-    hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
+  profiles: cloud
+  security:
+    user:
+      password: password
 
 ---
 server:
   port: 8181
   servlet:
-      context-path: /uaa
+    context-path: /uaa
+security:
+
+logging.level.org.springframework.security: DEBUG
+spring:
+  profiles: development
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    initialization-mode: never
+  security:
+    user:
+      password: password
+
+---
+server:
+  port: 8181
+  servlet:
+    context-path: /uaa
+security:
+  user:
 spring:
   profiles: docker
   datasource:
     url: jdbc:mysql://mysql:3306/dev
     username: root
     password: dbpass
+    initialization-mode: always
+  security:
+    user:
+      password: password
+
 eureka:
   instance:
     prefer-ip-address: true
@@ -48,3 +64,4 @@ spring:
     database: H2
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    initialization-mode: never

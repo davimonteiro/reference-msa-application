@@ -34,6 +34,7 @@ public class InventoryServiceV1 {
     private CatalogRepository catalogRepository;
 
     @HystrixCommand(fallbackMethod = "getProductFallback")
+    @Transactional(readOnly = true)
     public Product getProduct(String productId) {
         Product product = productRepository.findOneByProductId(productId);
 
@@ -50,6 +51,7 @@ public class InventoryServiceV1 {
     }
 
 
+    @Transactional(readOnly = true)
     public ShoppingCart checkAvailableInventory(ShoppingCart currentCart) throws Exception {
         List<Inventory> inventoryList = getAvailableInventoryForProductIds(currentCart);
 

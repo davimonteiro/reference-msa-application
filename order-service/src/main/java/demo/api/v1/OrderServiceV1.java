@@ -56,6 +56,7 @@ public class OrderServiceV1 {
         return newOrder;
     }
 
+    @Transactional
     public OrderEvent addOrderEvent(OrderEvent orderEvent, Boolean validate) throws Exception {
         // Get the order for the event
         Order order = orderRepository.findById(orderEvent.getOrderId()).get();
@@ -69,7 +70,7 @@ public class OrderServiceV1 {
         return orderEventRepository.save(orderEvent);
     }
 
-
+    @Transactional
     public OrderEvent addOrderEvent(Order order, Boolean validate) throws Exception {
         // Get the order for the event
 
@@ -106,6 +107,7 @@ public class OrderServiceV1 {
                 .get();
     }
 
+    @Transactional(readOnly = true)
     public List<Order> getOrdersForAccount(String accountNumber) throws Exception {
         List<Order> orders;
         validateAccountNumber(accountNumber);

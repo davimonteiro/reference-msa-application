@@ -3,12 +3,10 @@ package demo;
 import demo.domain.CatalogInfo;
 import demo.repository.CatalogInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Profile({"development"})
 public class DatabaseInitializer {
 
     @Autowired

@@ -1,7 +1,7 @@
-/*
 package service;
 
 import com.google.common.collect.Sets;
+import demo.AccountApplication;
 import demo.domain.Account;
 import demo.domain.Address;
 import demo.domain.CreditCard;
@@ -18,14 +18,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = AccountApplication.class)
 @ActiveProfiles(profiles = "test")
 public class AccountApplicationTests extends TestCase {
 
     private Logger log = LoggerFactory.getLogger(AccountApplicationTests.class);
 
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Test
     public void customerTest() {
@@ -74,6 +74,6 @@ public class AccountApplicationTests extends TestCase {
         customer = customerRepository.save(customer);
 
         // Query for the customer object to ensure cascading persistence of the object graph
-        log.info(customerRepository.findOne(customer.getId()).toString());
+        log.info(customerRepository.findById(customer.getId()).toString());
     }
-}*/
+}

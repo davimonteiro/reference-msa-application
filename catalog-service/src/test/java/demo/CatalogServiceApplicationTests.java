@@ -1,4 +1,3 @@
-/*
 package demo;
 
 
@@ -10,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = CatalogServiceApplication.class)
 @ActiveProfiles(profiles = "test")
 public class CatalogServiceApplicationTests {
 
@@ -22,7 +22,8 @@ public class CatalogServiceApplicationTests {
     private CatalogInfoRepository catalogInfoRepository;
 
     @Test
-    public void createCatalogInfo() throws Exception {
+    @Transactional
+    public void createCatalogInfo() {
         catalogInfoRepository.deleteAll();
         CatalogInfo catalogInfo = new CatalogInfo();
         catalogInfo.setCatalogId(0L);
@@ -34,4 +35,3 @@ public class CatalogServiceApplicationTests {
         assertEquals(catalogInfo, actual);
     }
 }
-*/

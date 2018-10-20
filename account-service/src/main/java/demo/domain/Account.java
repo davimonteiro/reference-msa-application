@@ -2,8 +2,14 @@ package demo.domain;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Set;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * This entity stores information about a {@link Customer}'s {@link Account}.
@@ -21,9 +27,9 @@ public class Account {
     private Long userId;
     private String accountNumber;
     private Boolean defaultAccount;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = ALL, fetch = EAGER)
     private Set<CreditCard> creditCards;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = ALL, fetch = EAGER)
     private Set<Address> addresses;
 
 }

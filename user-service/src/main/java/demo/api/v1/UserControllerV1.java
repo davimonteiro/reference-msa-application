@@ -28,7 +28,7 @@ public class UserControllerV1 {
         }
         return ofNullable(user)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found."));
     }
 
 }

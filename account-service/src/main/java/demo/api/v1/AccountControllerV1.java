@@ -19,7 +19,7 @@ public class AccountControllerV1 {
     public ResponseEntity getUserAccount() throws Exception {
         return Optional.ofNullable(accountService.getUserAccounts())
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new Exception("Accounts for user do not exist"));
+                .orElseThrow(() -> new Exception("Accounts for user do not exist."));
     }
 
 }

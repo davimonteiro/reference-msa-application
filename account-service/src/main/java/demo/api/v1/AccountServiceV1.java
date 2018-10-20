@@ -21,20 +21,20 @@ public class AccountServiceV1 {
     private OAuth2RestTemplate oAuth2RestTemplate;
 
     public List<Account> getUserAccounts() {
-        List<Account> account = null;
+        List<Account> accounts = null;
         User user = oAuth2RestTemplate.getForObject("http://user-service/uaa/v1/me", User.class);
         if (user != null) {
-            account = accountRepository.findAccountsByUserId(user.getId());
+            accounts = accountRepository.findAccountsByUserId(user.getId());
         }
 
         // Mask credit card numbers
-        if (account != null) {
-            account.forEach(acct -> acct.getCreditCards()
+        if (accounts != null) {
+            accounts.forEach(acct -> acct.getCreditCards()
                     .forEach(card ->
                             card.setNumber(card.getNumber()
                                     .replaceAll("([\\d]{4})(?!$)", "****-"))));
         }
 
-        return account;
+        return accounts;
     }
 }

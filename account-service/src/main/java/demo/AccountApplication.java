@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * The {@link AccountApplication} is a cloud-native Spring Boot application that manages
@@ -35,7 +36,9 @@ import org.springframework.stereotype.Component;
 @EnableResourceServer
 @EnableOAuth2Client
 @EnableHystrix
+@EnableTransactionManagement
 public class AccountApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(AccountApplication.class, args);
     }

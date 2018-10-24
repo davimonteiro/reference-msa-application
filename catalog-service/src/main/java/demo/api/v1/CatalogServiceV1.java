@@ -14,12 +14,19 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.stream.Collectors;
 
+
+/**
+ * The {@link CatalogServiceV1} class provides a service to retrieve catalogs and products.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @Service
 public class CatalogServiceV1 {
 
     @Autowired
     private CatalogInfoRepository catalogInfoRepository;
-
 
     @Autowired
     @LoadBalanced
@@ -46,4 +53,5 @@ public class CatalogServiceV1 {
                 productId),
                 Product.class);
     }
+
 }

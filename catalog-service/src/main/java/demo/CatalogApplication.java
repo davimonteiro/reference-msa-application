@@ -11,12 +11,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * The {@link CatalogApplication} is a cloud-native Spring Boot application that manages
+ * a bounded context for @{link Catalog}, @{link CatalogInfo}, and @{link Product}
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableJpaRepositories
@@ -51,12 +58,6 @@ public class CatalogApplication {
             web.ignoring().antMatchers("/actuator/**");
         }
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .authorizeRequests().antMatchers("/resources/**", "/actuator/**").permitAll()
-                    .and()
-                    .csrf().disable();
-        }
     }
+
 }

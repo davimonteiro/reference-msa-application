@@ -2,15 +2,18 @@ package demo.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
+/**
+ * The {@link Catalog} class is responsible for storing information about a specific catalog.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @Data
-public class Catalog implements Serializable {
+public class Catalog {
 
     private Long id;
     private Long catalogNumber;

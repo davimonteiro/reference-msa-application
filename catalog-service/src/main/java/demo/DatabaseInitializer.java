@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Initialize and populate the local database.
+ *
+ * @author Davi Monteiro
+ */
 @Service
 public class DatabaseInitializer {
 

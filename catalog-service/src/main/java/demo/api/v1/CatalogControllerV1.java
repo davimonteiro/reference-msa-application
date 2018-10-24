@@ -11,6 +11,14 @@ import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.notFound;
 
+
+/**
+ * This REST controller provides APIs to retrieve catalogs and products.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @RestController
 @RequestMapping("/v1")
 public class CatalogControllerV1 {
@@ -31,4 +39,5 @@ public class CatalogControllerV1 {
                 .map(ResponseEntity::ok)
                 .orElse(notFound().build());
     }
+
 }

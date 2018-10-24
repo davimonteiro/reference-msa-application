@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = CatalogServiceApplication.class)
+@SpringBootTest(classes = CatalogApplication.class)
 @ActiveProfiles(profiles = "test")
 public class CatalogServiceApplicationTests {
 

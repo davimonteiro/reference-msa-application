@@ -7,6 +7,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @EnableEurekaClient
 @EnableBeethoven
@@ -17,6 +20,16 @@ public class BeethovenApplication {
         ApplicationContext context = SpringApplication.run(BeethovenApplication.class, args);
         ActorSystem actorSystem = context.getBean(ActorSystem.class);
         Beethoven.initialize(actorSystem);
+    }
+
+    @Configuration
+    public class SecurityActuatorConfig extends WebSecurityConfigurerAdapter {
+
+        @Override
+        public void configure(WebSecurity web) {
+            web.ignoring().antMatchers("/actuator/**");
+        }
+
     }
 
 }

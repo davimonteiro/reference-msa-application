@@ -13,6 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
+/**
+ * Initialize and populate the local database.
+ *
+ * @author Davi Monteiro
+ */
 @Service
 public class DatabaseInitializer {
 

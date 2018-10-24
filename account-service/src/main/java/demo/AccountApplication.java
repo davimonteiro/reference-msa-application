@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -26,7 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * The {@link AccountApplication} is a cloud-native Spring Boot application that manages
- * a bounded context for @{link Customer}, @{link Account}, @{link CreditCard}, and @{link Address}
+ * a bounded context for @{link Customer}, @{link Account}, @{link CreditCard}, and @{link Address}.
  *
  * @author Kenny Bastani
  * @author Josh Long

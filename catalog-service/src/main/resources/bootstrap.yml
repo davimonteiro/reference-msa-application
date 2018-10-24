@@ -13,11 +13,10 @@ spring:
       uri: http://config-service:8888
 ---
 spring:
-  profiles: default
+  profiles: development
   cloud:
     config:
       uri: http://localhost:8888
-spring.profiles.active: development
 ---
 spring:
   profiles: cloud

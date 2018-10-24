@@ -7,9 +7,19 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
+
+/**
+ * The {@link EdgeApplication} is a cloud-native Spring Boot application that
+ * provides an approach to reverse proxy creation using routers and filters.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @SpringBootApplication
 @EnableEurekaClient
 @EnableZuulProxy
@@ -22,7 +32,13 @@ public class EdgeApplication {
     }
 
     @Configuration
-    public static class RestSecurityConfig extends WebSecurityConfigurerAdapter {
+    public static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Override
+        public void configure(WebSecurity web) {
+            web.ignoring().antMatchers("/actuator/**");
+        }
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.csrf().disable();

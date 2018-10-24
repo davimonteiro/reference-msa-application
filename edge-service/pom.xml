@@ -10,9 +10,9 @@
     <name>reference-msa-application/edge-service</name>
 
     <parent>
-        <groupId>org.kbastani</groupId>
+        <groupId>br.com.davimonteiro</groupId>
         <artifactId>reference-msa-application</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>

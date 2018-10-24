@@ -4,6 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
+
+/**
+ * The {@link DiscoveryApplication} is a cloud-native Spring Boot application for providing
+ * service discovery using Netflix Eureka.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @EnableEurekaServer
 @SpringBootApplication
 public class DiscoveryApplication {

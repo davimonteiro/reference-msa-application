@@ -1,0 +1,38 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: discovery-service
+  profiles:
+    active: development
+
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+---
+spring:
+  profiles: development
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://${DOCKER_IP:192.168.99.100}:8888
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    service-url:
+      defaultZone: http://${DOCKER_IP:192.168.99.100}:8761/eureka/

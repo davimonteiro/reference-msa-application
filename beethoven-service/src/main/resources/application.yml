@@ -1,0 +1,35 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: beethoven-service
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://${DOCKER_IP:192.168.99.100}:8888
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/

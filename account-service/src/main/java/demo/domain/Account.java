@@ -16,6 +16,7 @@ import static javax.persistence.FetchType.EAGER;
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
 @Data
 @Entity

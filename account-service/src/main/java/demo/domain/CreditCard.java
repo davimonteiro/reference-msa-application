@@ -10,6 +10,7 @@ import javax.persistence.*;
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
 @Data
 @Entity

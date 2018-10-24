@@ -1,6 +1,8 @@
 spring:
   application:
     name: account-service
+  profiles:
+    active: development
 server:
   port: 0
 ---

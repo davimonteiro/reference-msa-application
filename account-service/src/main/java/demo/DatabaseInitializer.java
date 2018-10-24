@@ -61,8 +61,5 @@ public class DatabaseInitializer {
 
             customerRepository.save(customer);
         }
-
-        customerRepository.findAll().forEach(customer -> System.err.println(customer.toString()));
     }
-
 }

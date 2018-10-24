@@ -11,6 +11,7 @@ import static javax.persistence.CascadeType.*;
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
 @Data
 @Entity

@@ -1,8 +1,8 @@
 package demo.repository;
 
 import demo.domain.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,9 +12,10 @@ import java.util.List;
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
-public interface AccountRepository extends PagingAndSortingRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    List<Account> findAccountsByUserId(@Param("userId") Long userId);
+    List<Account> findAccountsByUserId(Long userId);
 
 }

@@ -10,9 +10,9 @@
     <name>reference-msa-application/account-service</name>
 
     <parent>
-        <groupId>org.kbastani</groupId>
+        <groupId>br.com.davimonteiro</groupId>
         <artifactId>reference-msa-application</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -41,9 +41,8 @@
             <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
-            <version>1.4.4.RELEASE</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -100,6 +99,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

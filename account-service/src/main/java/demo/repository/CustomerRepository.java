@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
 public interface CustomerRepository extends PagingAndSortingRepository<Customer, Long> {
 

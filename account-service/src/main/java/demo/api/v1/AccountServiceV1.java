@@ -1,8 +1,8 @@
 package demo.api.v1;
 
 import demo.domain.Account;
-import demo.repository.AccountRepository;
 import demo.domain.User;
+import demo.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -10,6 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+/**
+ * The {@link AccountServiceV1} class provides a service to retrieve user accounts from the current user.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @Service
 public class AccountServiceV1 {
 

@@ -12,6 +12,14 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+
+/**
+ * This REST controller provides APIs to retrieve products and verify available inventory.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @RestController
 @RequestMapping("/v1")
 public class InventoryControllerV1 {

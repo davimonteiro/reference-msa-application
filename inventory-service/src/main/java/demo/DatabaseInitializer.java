@@ -10,6 +10,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Initialize and populate the local database.
+ *
+ * @author Davi Monteiro
+ */
 @Service
 public class DatabaseInitializer {
 

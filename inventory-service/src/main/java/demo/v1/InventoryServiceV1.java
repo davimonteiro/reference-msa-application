@@ -21,6 +21,14 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
+
+/**
+ * The {@link InventoryServiceV1} class provides services to retrieve products and verify available inventory.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @Service
 public class InventoryServiceV1 {
 
@@ -33,7 +41,7 @@ public class InventoryServiceV1 {
     @Autowired
     private CatalogRepository catalogRepository;
 
-    @HystrixCommand(fallbackMethod = "getProductFallback")
+    @HystrixCommand
     @Transactional(readOnly = true)
     public Product getProduct(String productId) {
         Product product = productRepository.findOneByProductId(productId);
@@ -45,11 +53,6 @@ public class InventoryServiceV1 {
 
         return product;
     }
-
-    private Product getProductFallback(String productId) {
-        return null;
-    }
-
 
     @Transactional(readOnly = true)
     public ShoppingCart checkAvailableInventory(ShoppingCart currentCart) throws Exception {
@@ -86,11 +89,6 @@ public class InventoryServiceV1 {
     public List<Inventory> getAvailableInventoryForProductIds(String productIds) {
         String[] ids = productIds.split(",");
         List<Inventory> inventoryList = getInventories(Arrays.asList(ids));
-        return inventoryList;
-    }
-
-    public List<Inventory> getAvailableInventoryForProductIds(List<String> productIds) {
-        List<Inventory> inventoryList = getInventories(productIds);
         return inventoryList;
     }
 

@@ -10,6 +10,13 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 
+/**
+ * A simple {@link Catalog} entity for a catalog.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @Entity
 @Getter @Setter @ToString
 public class Catalog {

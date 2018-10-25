@@ -1,20 +1,22 @@
-/*
 package demo;
 
 import demo.domain.*;
 import demo.repository.*;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,16 +24,17 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = InventoryApplication.class)
 @ActiveProfiles(profiles = "test")
-public class InventoryApplicationTests extends BaseTest {
+public class InventoryApplicationTests {
 
     private Logger log = LoggerFactory.getLogger(InventoryApplicationTests.class);
 
@@ -53,18 +56,30 @@ public class InventoryApplicationTests extends BaseTest {
     @Autowired
     private InventoryRepository inventoryRepository;
 
+    @Autowired
+    private WebApplicationContext context;
+
+    protected MockMvc mvc;
+
+    protected static final MediaType contentType = MediaType.APPLICATION_JSON;
+
+    @Before
+    public void setUp() {
+        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
+
     @Test
     public void getAvailableInventoryForProductIdsTest() throws Exception {
         MvcResult result = mvc.perform(get("/v1/inventory/orchestrated").param("productIds", "23323")).andReturn();
         System.out.println(result);
     }
 
-    @Ignore
     @Test
+    @Transactional
     public void inventoryTest() {
         Warehouse warehouse = new Warehouse("Pivotal SF");
 
-        List<Product> products = Arrays.asList(
+        List<Product> products = Stream.of(
 
                 new Product("Best. Cloud. Ever. (T-Shirt, Men's Large)", "SKU-24642", "<p>Do you love your cloud platform? " +
                         "Do you push code continuously into production on a daily basis? " +
@@ -83,6 +98,7 @@ public class InventoryApplicationTests extends BaseTest {
                         "4 nines of <em>re-washability</em></p>", 14.99),
 
                 new Product("We're gonna need a bigger VM (T-Shirt, Women's Small)", "SKU-12464", 13.99),
+
                 new Product("cf push awesome (Hoodie, Men's Medium)", "SKU-64233",
                         "<p>One of the great natives of the cloud once said \"<em>" +
                                 "Production is the happiest place on earth for us - it's better than Disneyland</em>\". " +
@@ -90,12 +106,11 @@ public class InventoryApplicationTests extends BaseTest {
                                 "comfortable and casual. <br /><br />&nbsp; <strong>Cloud Native PaaS Collection</strong><br />" +
                                 "&nbsp; 10% cloud stuff, 90% platform nylon<br />&nbsp; Cloud wash safe<br />" +
                                 "&nbsp; Five nines of <em>comfortability</em></p>", 21.99))
-                .stream()
                 .collect(Collectors.toList());
 
-        productRepository.save(products);
+        productRepository.saveAll(products);
 
-        Product product1 = productRepository.findOne(products.get(0).getId());
+        Product product1 = productRepository.findById(products.get(0).getId()).get();
 
         assertThat(product1, is(notNullValue()));
         assertThat(product1.getName(), is(products.get(0).getName()));
@@ -109,7 +124,7 @@ public class InventoryApplicationTests extends BaseTest {
 
         catalogRepository.save(catalog);
 
-        Catalog catalog1 = catalogRepository.findOne(catalog.getId());
+        Catalog catalog1 = catalogRepository.findById(catalog.getId()).get();
 
         assertThat(catalog1, is(notNullValue()));
         assertThat(catalog1.getName(), is(catalog.getName()));
@@ -121,14 +136,14 @@ public class InventoryApplicationTests extends BaseTest {
                 "CA", "Mountain View", "United States", 94043);
 
         // Save the addresses
-        addressRepository.save(Arrays.asList(warehouseAddress, shipToAddress));
+        addressRepository.saveAll(Arrays.asList(warehouseAddress, shipToAddress));
 
-        Address address1 = addressRepository.findOne(shipToAddress.getId());
+        Address address1 = addressRepository.findById(shipToAddress.getId()).get();
 
         assertThat(address1, is(notNullValue()));
         assertThat(address1.toString(), is(shipToAddress.toString()));
 
-        Address address2 = addressRepository.findOne(warehouseAddress.getId());
+        Address address2 = addressRepository.findById(warehouseAddress.getId()).get();
 
         assertThat(address2, is(notNullValue()));
         assertThat(address2.toString(), is(warehouseAddress.toString()));
@@ -139,7 +154,7 @@ public class InventoryApplicationTests extends BaseTest {
         warehouse.setAddress(warehouseAddress);
         warehouse = warehouseRepository.save(warehouse);
 
-        Warehouse warehouse1 = warehouseRepository.findOne(warehouse.getId());
+        Warehouse warehouse1 = warehouseRepository.findById(warehouse.getId()).get();
 
         assertThat(warehouse1, is(notNullValue()));
         assertThat(warehouse1.toString(), is(warehouse.toString()));
@@ -155,21 +170,19 @@ public class InventoryApplicationTests extends BaseTest {
                         .collect(Collectors.joining("")), a, finalWarehouse, Inventory.InventoryStatus.IN_STOCK))
                 .collect(Collectors.toSet());
 
-        inventoryRepository.save(inventories);
+        inventoryRepository.saveAll(inventories);
 
         Shipment shipment = new Shipment(inventories, shipToAddress,
                 warehouse, Shipment.ShipmentStatus.SHIPPED);
 
         shipmentRepository.save(shipment);
 
-        Shipment shipment1 = shipmentRepository.findOne(shipment.getId());
+        Shipment shipment1 = shipmentRepository.findById(shipment.getId()).get();
 
         assertThat(shipment1, is(notNullValue()));
         assertThat(shipment1.toString(), is(shipment.toString()));
     }
 
-
-    @Ignore
     @Test
     public void getAvailableInventoryForShoppingCartTest() throws Exception {
         ShoppingCart cart = new ShoppingCart();
@@ -194,6 +207,4 @@ public class InventoryApplicationTests extends BaseTest {
 
     }
 
-
 }
-*/

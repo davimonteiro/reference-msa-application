@@ -10,10 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- * A simple domain class for the {@link Warehouse}
+ * A simple domain class for the {@link Warehouse}.
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
 @Entity
 @Getter @Setter @ToString

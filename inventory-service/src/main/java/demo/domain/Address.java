@@ -13,6 +13,7 @@ import javax.persistence.Id;
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
 @Entity
 @Getter @Setter @ToString

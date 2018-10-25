@@ -1,6 +1,5 @@
 package demo;
 
-import demo.config.DatabaseInitializer;
 import demo.domain.Catalog;
 import demo.domain.Product;
 import org.springframework.boot.CommandLineRunner;
@@ -11,12 +10,23 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * The {@link InventoryApplication} is a cloud-native Spring Boot application that manages
+ * a bounded context for @{link Address}, @{link Catalog}, @{link Inventory}, @{link LineItem}
+ * , @{link Product}, @{link Shipment}, @{link ShoppingCart} and @{link Warehouse}.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @SpringBootApplication
 @EnableConfigurationProperties
 @EnableTransactionManagement
@@ -52,5 +62,15 @@ public class InventoryApplication {
             config.setBasePath("/api");
         }
     }
-}
 
+    @Configuration
+    public class SecurityActuatorConfig extends WebSecurityConfigurerAdapter {
+
+        @Override
+        public void configure(WebSecurity web) {
+            web.ignoring().antMatchers("/actuator/**");
+        }
+
+    }
+
+}

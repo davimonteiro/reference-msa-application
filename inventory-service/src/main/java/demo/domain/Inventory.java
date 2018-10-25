@@ -6,6 +6,13 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * A simple {@link Inventory} entity for storing inventory's information.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @Entity
 @Getter @Setter @ToString
 public class Inventory {

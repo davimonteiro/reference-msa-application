@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Kenny Bastani
  * @author Josh Long
+ * @author Davi Monteiro
  */
 @SpringBootApplication
 @EnableJpaRepositories

@@ -28,11 +28,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.google.common.collect.Sets.newHashSet;
+import static demo.beethoven.BeethovenOperation.Operation.SCHEDULE;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
@@ -114,6 +119,7 @@ public class ShoppingCartServiceV1 {
         User user = oAuth2RestTemplate.getForObject("http://user-service/uaa/v1/me", User.class);
         ShoppingCart shoppingCart = null;
         if (user != null) {
+            System.err.println(user.toString());
             Catalog catalog = restTemplate.getForObject("http://catalog-service/v1/catalog", Catalog.class);
             shoppingCart = aggregateCartEvents(user, catalog);
         }
@@ -154,15 +160,15 @@ public class ShoppingCartServiceV1 {
 
     public CheckoutResult checkoutOrchestrated() {
         OAuth2AccessToken accessToken = oAuth2RestTemplate.getAccessToken();
-        Set<ContextualInput> inputs = new HashSet<>();
-        inputs.add(new ContextualInput("${access_token}", accessToken.getTokenType() + " " + accessToken.getValue()));
+        Set<ContextualInput> inputs = newHashSet(new ContextualInput(accessToken));
 
         BeethovenOperation beethovenOperation = new BeethovenOperation();
         beethovenOperation.setWorkflowName("checkoutProcess");
-        beethovenOperation.setOperation(BeethovenOperation.Operation.SCHEDULE.getId());
+        beethovenOperation.setOperation(SCHEDULE.getId());
         beethovenOperation.setInputs(inputs);
 
-        restTemplate.postForEntity("http://beethoven-service/api/workflows/checkoutProcess/operations",
+        restTemplate.postForEntity(
+                "http://beethoven-service/api/workflows/checkoutProcess/operations",
                 beethovenOperation, BeethovenOperation.class);
 
         return new CheckoutResult();
@@ -237,7 +243,9 @@ public class ShoppingCartServiceV1 {
 
         workflowInstance.setEndTime(LocalDateTime.now());
         workflowInstance.setSuccessful(checkoutResult.getOrder() != null);
-        reportToCsv(workflowInstance);
+        if (workflowInstance.isSuccessful()) {
+            reportToCsv(workflowInstance);
+        }
 
         // Return errors with available inventory
         return checkoutResult;

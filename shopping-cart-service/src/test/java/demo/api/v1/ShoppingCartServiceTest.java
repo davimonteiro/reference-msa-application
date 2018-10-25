@@ -1,5 +1,3 @@
-/*
-
 package demo.api.v1;
 
 import demo.ShoppingCartApplication;
@@ -13,20 +11,17 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(profiles = "development")
-//@SpringBootTest
-@SpringApplicationConfiguration(classes = ShoppingCartApplication.class)
-@WebAppConfiguration
+@ActiveProfiles(profiles = "test")
+@SpringBootTest(classes = ShoppingCartApplication.class)
 public class ShoppingCartServiceTest {
 
     @Autowired
@@ -34,7 +29,8 @@ public class ShoppingCartServiceTest {
 
     @Test
     public void testGetShoppingCart() throws Exception {
-        User user = new User(0L);
+        User user = new User();
+        user.setId(0L);
         shoppingCartService.addCartEvent(new CartEvent(CartEvent.CartEventType.ADD_ITEM, 0L, "SKU-24642", 1), user);
         shoppingCartService.addCartEvent(new CartEvent(CartEvent.CartEventType.ADD_ITEM, 0L, "SKU-24642", 1), user);
         shoppingCartService.addCartEvent(new CartEvent(CartEvent.CartEventType.ADD_ITEM, 0L, "SKU-34563", 1), user);
@@ -50,7 +46,7 @@ public class ShoppingCartServiceTest {
                 .stream().collect(Collectors.toSet());
         catalog.setProducts(products);
 
-        ShoppingCart shoppingCart = shoppingCartService.aggregateCartEvents(new User(0L), catalog);
+        ShoppingCart shoppingCart = shoppingCartService.aggregateCartEvents(user, catalog);
 
         Assert.assertNotNull(shoppingCart);
         Assert.assertNotEquals(shoppingCart.getLineItems().size(), 0);
@@ -62,7 +58,4 @@ public class ShoppingCartServiceTest {
         Assert.assertNotNull(result);
     }
 
-
-
 }
-*/

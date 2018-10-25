@@ -1,4 +1,3 @@
-/*
 package demo;
 
 import demo.api.v1.OrderServiceV1;
@@ -13,26 +12,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = OrderApplication.class)
+@ActiveProfiles(profiles = "test")
 public class OrderApplicationTest extends TestCase {
 
     private Logger log = LoggerFactory.getLogger(OrderApplicationTest.class);
 
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
-    InvoiceRepository invoiceRepository;
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
-    OrderServiceV1 orderServiceV1;
+    private OrderServiceV1 orderServiceV1;
 
     @Test
+    @Transactional
     public void orderTest() {
 
         // Create a new shipping address for the customer
@@ -97,4 +100,4 @@ public class OrderApplicationTest extends TestCase {
         Assert.assertEquals(orderPending.getOrderStatus(), Order.OrderStatus.PENDING);
     }
 
-}*/
+}

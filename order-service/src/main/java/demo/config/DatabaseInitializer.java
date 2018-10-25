@@ -2,16 +2,20 @@ package demo.config;
 
 import demo.domain.Address;
 import demo.domain.Invoice;
-import demo.repository.InvoiceRepository;
 import demo.domain.LineItem;
 import demo.domain.Order;
+import demo.repository.InvoiceRepository;
 import demo.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Initialize and populate the local database.
+ *
+ * @author Davi Monteiro
+ */
 @Service
-@Profile("docker")
 public class DatabaseInitializer {
 
     @Autowired
@@ -20,6 +24,7 @@ public class DatabaseInitializer {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
+    @Transactional
     public void populate() {
         // Clear existing data
         orderRepository.deleteAll();

@@ -84,6 +84,7 @@ public class OrderServiceV1 {
         return orderEventRepository.save(orderEvent);
     }
 
+    @Transactional(readOnly = true)
     public Order getOrder(Long orderId, Boolean validate) {
         // Get the order for the event
         Order order = orderRepository.findById(orderId).get();

@@ -25,7 +25,7 @@ public class OrderControllerV1 {
     public ResponseEntity getOrders(@PathVariable("accountNumber") String accountNumber) throws Exception {
         return ofNullable(orderService.getOrdersForAccount(accountNumber))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new Exception("Accounts for user do not exist"));
+                .orElseThrow(() -> new Exception("Accounts for user do not exist."));
     }
 
     @PostMapping(path = "/orders/{orderId}/events")
@@ -36,7 +36,7 @@ public class OrderControllerV1 {
         assert !Objects.equals(orderId, orderEvent.getOrderId());
         return ofNullable(orderService.addOrderEvent(orderEvent, true))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new Exception("Order event could not be applied to order"));
+                .orElseThrow(() -> new Exception("Order event could not be applied to order."));
     }
 
     @GetMapping(path = "/orders/{orderId}")
@@ -44,7 +44,7 @@ public class OrderControllerV1 {
         assert orderId != null;
         return ofNullable(orderService.getOrder(orderId, true))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new Exception("Could not retrieve order"));
+                .orElseThrow(() -> new Exception("Could not retrieve order."));
     }
 
     @PostMapping(path = "/orders")
@@ -53,7 +53,7 @@ public class OrderControllerV1 {
         assert lineItems.size() > 0;
         return ofNullable(orderService.createOrder(lineItems))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new Exception("Could not create the order"));
+                .orElseThrow(() -> new Exception("Could not create the order."));
     }
 
 
@@ -63,14 +63,14 @@ public class OrderControllerV1 {
         assert shoppingCart.getLineItems().size() > 0;
         return ofNullable(orderService.createOrder(shoppingCart.getLineItems()))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new Exception("Could not create the order"));
+                .orElseThrow(() -> new Exception("Could not create the order."));
     }
 
     @PostMapping(path = "/orders/events/orchestrated", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity addOrderEventOrchestrated(@RequestBody Order order) throws Exception {
         return ofNullable(orderService.addOrderEvent(order, true))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new Exception("Order event could not be applied to order"));
+                .orElseThrow(() -> new Exception("Order event could not be applied to order."));
     }
 
 }

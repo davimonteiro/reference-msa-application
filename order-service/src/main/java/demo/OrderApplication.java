@@ -19,8 +19,17 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextListener;
 
+
+/**
+ * The {@link OrderApplication} is a cloud-native Spring Boot application that manages
+ * a bounded context for @{link Account}, @{link Address}, @{link CreditCard}, @{link Invoice},
+ * @{link LineItem}, @{link Order}, @{link OrderEvent}, and @{link ShoppingCart}.
+ *
+ * @author Kenny Bastani
+ * @author Josh Long
+ * @author Davi Monteiro
+ */
 @EnableJpaRepositories
 @EnableJpaAuditing
 @SpringBootApplication
@@ -42,7 +51,7 @@ public class OrderApplication {
     }
 
     @Bean
-    @Profile("docker")
+    @Profile({"docker", "cloud", "development"})
     CommandLineRunner commandLineRunner(DatabaseInitializer databaseInitializer) {
         return args -> {
             // Initialize the database for end to end integration testing
@@ -59,8 +68,4 @@ public class OrderApplication {
         }
     }
 
-    @Bean
-    public RequestContextListener requestContextListener() {
-        return new RequestContextListener();
-    }
 }

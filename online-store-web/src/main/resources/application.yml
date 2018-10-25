@@ -1,11 +1,12 @@
-spring:
-  profiles:
-    active: development
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
 ---
 spring:
   profiles: development
-  application:
-    name: online-store-web
 zuul:
   ignored-services: '*'
   routes:
@@ -27,6 +28,8 @@ security:
 eureka:
   instance:
     non-secure-port: 8787
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
     prefer-ip-address: true
   client:
     registerWithEureka: true
@@ -59,6 +62,8 @@ security:
 eureka:
   instance:
     non-secure-port: 8787
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
     prefer-ip-address: true
   client:
     registerWithEureka: true

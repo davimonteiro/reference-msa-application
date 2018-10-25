@@ -1,19 +1,16 @@
 package demo.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import javax.persistence.ManyToMany;
+import java.util.HashSet;
+import java.util.Set;
+
+import static javax.persistence.FetchType.EAGER;
 
 @Data
 @Entity
@@ -26,31 +23,27 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String email;
-
-    @Override
-    public Collection getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return authorities;
-    }
+    @ManyToMany(fetch = EAGER)
+    private Set<Authority> authorities = new HashSet<>();
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
+
 }

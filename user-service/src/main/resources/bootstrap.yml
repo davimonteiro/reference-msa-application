@@ -1,6 +1,12 @@
 spring:
   application:
     name: user-service
+  profiles:
+    active: development
+server:
+  port: 8181
+  servlet:
+    context-path: /uaa
 ---
 spring:
   profiles: docker

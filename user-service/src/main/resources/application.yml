@@ -1,59 +1,53 @@
-spring:
-  profiles:
-    active: development
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
 
 ---
-server:
-  servlet:
-    context-path: /uaa
-spring:
-  profiles: cloud
-  security:
-    user:
-      password: password
-
----
-server:
-  port: 8181
-  servlet:
-    context-path: /uaa
-security:
-
 logging.level.org.springframework.security: DEBUG
 spring:
   profiles: development
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
-    initialization-mode: never
+    url: jdbc:h2:mem:app_db;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      new_generator_mappings: false
   security:
     user:
       password: password
-
+    enable-csrf: false
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /uaa/actuator/health
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 ---
-server:
-  port: 8181
-  servlet:
-    context-path: /uaa
-security:
-  user:
 spring:
   profiles: docker
   datasource:
     url: jdbc:mysql://mysql:3306/dev
     username: root
     password: dbpass
-    initialization-mode: always
-  security:
-    user:
-      password: password
-
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      new_generator_mappings: false
 eureka:
   instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /uaa/actuator/health
     prefer-ip-address: true
-    non-secure-port: 8181
   client:
-    registerWithEureka: true
-    fetchRegistry: true
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka/
 ---

@@ -1,7 +1,6 @@
 package demo.v1;
 
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import demo.domain.*;
 import demo.repository.CatalogRepository;
 import demo.repository.InventoryRepository;
@@ -41,7 +40,6 @@ public class InventoryServiceV1 {
     @Autowired
     private CatalogRepository catalogRepository;
 
-    @HystrixCommand
     @Transactional(readOnly = true)
     public Product getProduct(String productId) {
         Product product = productRepository.findOneByProductId(productId);

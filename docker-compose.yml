@@ -1,125 +1,129 @@
 config-service:
-  image: kbastani/config-service
+  image: davimonteiro/config-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
   ports:
-   - 8888:8888
+  - 8888:8888
 hystrix-dashboard:
-  image: kbastani/hystrix-dashboard
+  image: davimonteiro/hystrix-dashboard
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
   ports:
-   - 6161:6161
+  - 6161:6161
+discovery-service:
+  image: davimonteiro/discovery-service
+  ports:
+  - 8761:8761
+  environment:
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
+admin-service:
+  image: davimonteiro/admin-service
+  environment:
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
+  - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+  ports:
+  - 9999:9999
+  links:
+  - discovery-service
+beethoven-service:
+  image: davimonteiro/beethoven-service
+  environment:
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
+  ports:
+  - 9090:9090
+  links:
+  - discovery-service
 mysql:
   image: mysql:5.7
   ports:
-   - 3306:3306
+  - 3306:3306
   environment:
-   - MYSQL_ROOT_PASSWORD=dbpass
-   - MYSQL_DATABASE=dev
-neo4j:
-  image: neo4j:2.3
-  ports:
-   - 7474:7474
-  environment:
-   - NEO4J_AUTH=none
-mongo:
-  image: mongo:3.3
-  ports:
-   - 27017:27017
-redis:
-  image: redis:3.0
-  ports:
-   - 6379:6379
+  - MYSQL_ROOT_PASSWORD=dbpass
+  - MYSQL_DATABASE=dev
 user-service:
-  image: kbastani/user-service
+  image: davimonteiro/user-service
   ports:
-   - 8181:8181
+  - 8181:8181
   links:
-   - mysql
-   - discovery-service
-   - config-service
+  - mysql
+  - discovery-service
+#  - config-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
-discovery-service:
-  image: kbastani/discovery-service
-  ports:
-   - 8761:8761
-  environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
 edge-service:
-  image: kbastani/edge-service
+  image: davimonteiro/edge-service
   ports:
-   - 9999:9999
+  - 9999:9999
   links:
-   - user-service
-   - discovery-service
-   - config-service
+  - user-service
+  - discovery-service
+#  - config-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
 account-service:
-  image: kbastani/account-service
+  image: davimonteiro/account-service
   links:
-   - user-service
-   - discovery-service
-   - config-service
-   - mysql
+  - user-service
+  - discovery-service
+#  - config-service
+  - mysql
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
 inventory-service:
-  image: kbastani/inventory-service
+  image: davimonteiro/inventory-service
   links:
-   - neo4j
-   - discovery-service
-   - config-service
+  - mysql
+  - discovery-service
+#  - config-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
 order-service:
-  image: kbastani/order-service
+  image: davimonteiro/order-service
   links:
-   - mongo
-   - discovery-service
-   - config-service
-   - user-service
+  - mysql
+  - discovery-service
+#  - config-service
+  - user-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
 catalog-service:
-  image: kbastani/catalog-service
+  image: davimonteiro/catalog-service
   links:
-   - redis
-   - mysql
-   - discovery-service
-   - config-service
+  - mysql
+  - discovery-service
+#  - config-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
 shopping-cart-service:
-  image: kbastani/shopping-cart-service
+  image: davimonteiro/shopping-cart-service
   links:
-   - mysql
-   - discovery-service
-   - config-service
-   - user-service
+  - mysql
+  - discovery-service
+#  - config-service
+  - user-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP
 online-store-web:
-  image: kbastani/online-store-web
+  image: davimonteiro/online-store-web
   ports:
-   - 8787:8787
+  - 8787:8787
   links:
-   - discovery-service
-   - config-service
-   - user-service
-   - edge-service
+  - discovery-service
+#  - config-service
+  - user-service
+  - edge-service
   environment:
-   - SPRING_PROFILES_ACTIVE=docker
-   - DOCKER_IP=$DOCKER_IP
+  - SPRING_PROFILES_ACTIVE=docker
+  - DOCKER_IP=$DOCKER_IP

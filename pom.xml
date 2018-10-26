@@ -10,9 +10,9 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.kbastani</groupId>
+    <groupId>br.com.davimonteiro</groupId>
     <artifactId>reference-msa-application</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>reference-msa-application/parent</name>
 
@@ -21,7 +21,6 @@
         <module>order-service</module>
         <module>account-service</module>
         <module>user-service</module>
-        <module>payment-service</module>
         <module>config-service</module>
         <module>discovery-service</module>
         <module>online-store-web</module>
@@ -30,6 +29,7 @@
         <module>shopping-cart-service</module>
         <module>hystrix-dashboard</module>
         <module>beethoven-service</module>
+        <module>admin-service</module>
     </modules>
 
     <properties>
@@ -39,29 +39,26 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <spring-cloud.version>Finchley.M8</spring-cloud.version>
-        <docker.plugin.version>0.3.258</docker.plugin.version>
-        <docker.image.prefix>kbastani</docker.image.prefix>
+        <docker.plugin.version>1.2.0</docker.plugin.version>
+        <docker.image.prefix>davimonteiro</docker.image.prefix>
     </properties>
 
     <dependencies>
-
-        <!-- Test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- END Test dependencies -->
-
-        <!-- Other dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
-        <!-- END Other dependencies -->
-
     </dependencies>
 
     <dependencyManagement>

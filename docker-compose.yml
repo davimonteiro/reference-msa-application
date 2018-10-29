@@ -12,6 +12,8 @@ hystrix-dashboard:
   - DOCKER_IP=$DOCKER_IP
   ports:
   - 6161:6161
+  links:
+  - config-service
 discovery-service:
   image: davimonteiro/discovery-service
   ports:
@@ -19,6 +21,8 @@ discovery-service:
   environment:
   - SPRING_PROFILES_ACTIVE=docker
   - DOCKER_IP=$DOCKER_IP
+  links:
+  - config-service
 admin-service:
   image: davimonteiro/admin-service
   environment:
@@ -26,7 +30,7 @@ admin-service:
   - DOCKER_IP=$DOCKER_IP
   - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
   ports:
-  - 9999:9999
+  - 9191:9191
   links:
   - discovery-service
 beethoven-service:
@@ -52,7 +56,7 @@ user-service:
   links:
   - mysql
   - discovery-service
-#  - config-service
+  - config-service
   environment:
   - SPRING_PROFILES_ACTIVE=docker
   - DOCKER_IP=$DOCKER_IP
@@ -63,7 +67,7 @@ edge-service:
   links:
   - user-service
   - discovery-service
-#  - config-service
+  - config-service
   environment:
   - SPRING_PROFILES_ACTIVE=docker
   - DOCKER_IP=$DOCKER_IP
@@ -72,7 +76,7 @@ account-service:
   links:
   - user-service
   - discovery-service
-#  - config-service
+  - config-service
   - mysql
   environment:
   - SPRING_PROFILES_ACTIVE=docker
@@ -82,7 +86,7 @@ inventory-service:
   links:
   - mysql
   - discovery-service
-#  - config-service
+  - config-service
   environment:
   - SPRING_PROFILES_ACTIVE=docker
   - DOCKER_IP=$DOCKER_IP
@@ -91,7 +95,7 @@ order-service:
   links:
   - mysql
   - discovery-service
-#  - config-service
+  - config-service
   - user-service
   environment:
   - SPRING_PROFILES_ACTIVE=docker
@@ -101,7 +105,7 @@ catalog-service:
   links:
   - mysql
   - discovery-service
-#  - config-service
+  - config-service
   environment:
   - SPRING_PROFILES_ACTIVE=docker
   - DOCKER_IP=$DOCKER_IP
@@ -110,7 +114,7 @@ shopping-cart-service:
   links:
   - mysql
   - discovery-service
-#  - config-service
+  - config-service
   - user-service
   environment:
   - SPRING_PROFILES_ACTIVE=docker
@@ -121,7 +125,7 @@ online-store-web:
   - 8787:8787
   links:
   - discovery-service
-#  - config-service
+  - config-service
   - user-service
   - edge-service
   environment:

@@ -7,8 +7,6 @@ management:
 ---
 spring:
   profiles: development
-  application:
-    name: edge-service
 zuul:
   ignored-services: '*'
   ignoredPatterns: /**/api/**
@@ -36,8 +34,6 @@ eureka:
 ---
 spring:
   profiles: docker
-  application:
-    name: edge-service
 zuul:
   ignored-services: '*'
   ignoredPatterns: /**/api/**

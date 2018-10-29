@@ -1,6 +1,7 @@
 package demo;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.jdbc.DataSourceHealthIndicatorAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
@@ -20,7 +21,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  * @author Josh Long
  * @author Davi Monteiro
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceHealthIndicatorAutoConfiguration.class)
 @EnableEurekaClient
 @EnableZuulProxy
 @EnableResourceServer

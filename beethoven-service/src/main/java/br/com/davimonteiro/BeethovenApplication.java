@@ -4,6 +4,7 @@ import akka.actor.ActorSystem;
 import io.beethoven.Beethoven;
 import io.beethoven.config.EnableBeethoven;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.jdbc.DataSourceHealthIndicatorAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ApplicationContext;
@@ -13,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @EnableEurekaClient
 @EnableBeethoven
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceHealthIndicatorAutoConfiguration.class)
 public class BeethovenApplication {
 
     public static void main(String... args) throws Exception {

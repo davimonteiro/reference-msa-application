@@ -1,6 +1,7 @@
 package demo;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.jdbc.DataSourceHealthIndicatorAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.config.server.EnableConfigServer;
 
@@ -12,7 +13,7 @@ import org.springframework.cloud.config.server.EnableConfigServer;
  * @author Josh Long
  * @author Davi Monteiro
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceHealthIndicatorAutoConfiguration.class)
 @EnableConfigServer
 public class ConfigApplication {
 

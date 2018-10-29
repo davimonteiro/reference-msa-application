@@ -3,6 +3,7 @@ package demo;
 import demo.config.DatabaseInitializer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.jdbc.DataSourceHealthIndicatorAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -32,7 +33,7 @@ import org.springframework.stereotype.Component;
  */
 @EnableJpaRepositories
 @EnableJpaAuditing
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceHealthIndicatorAutoConfiguration.class)
 @EnableEurekaClient
 @EnableResourceServer
 @EnableOAuth2Client

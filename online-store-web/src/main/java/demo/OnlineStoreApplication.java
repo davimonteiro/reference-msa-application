@@ -1,6 +1,7 @@
 package demo;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.jdbc.DataSourceHealthIndicatorAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -18,7 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @author Josh Long
  * @author Davi Monteiro
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceHealthIndicatorAutoConfiguration.class)
 @EnableEurekaClient
 @EnableZuulProxy
 @EnableOAuth2Sso

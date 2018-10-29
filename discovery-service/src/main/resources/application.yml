@@ -12,8 +12,8 @@ eureka:
     leaseRenewalIntervalInSeconds: 10
     health-check-url-path: /actuator/health
   client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: false
+    fetch-registry: false
 ---
 spring:
   profiles: docker
@@ -22,5 +22,5 @@ eureka:
     leaseRenewalIntervalInSeconds: 10
     health-check-url-path: /actuator/health
   client:
-    service-url:
-      defaultZone: http://${DOCKER_IP:192.168.99.100}:8761/eureka/
+    register-with-eureka: false
+    fetch-registry: false

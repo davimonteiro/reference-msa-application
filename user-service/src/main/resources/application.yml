@@ -44,12 +44,32 @@ spring:
       new_generator_mappings: false
 eureka:
   instance:
-    leaseRenewalIntervalInSeconds: 10
-    health-check-url-path: /uaa/actuator/health
     prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
   client:
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka/
+---
+spring:
+  profiles: k8s
+  datasource:
+    url: jdbc:mysql://${MYSQL_IP}/dev
+    username: root
+    password: dbpass
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      new_generator_mappings: false
+eureka:
+  instance:
+    prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_IP}/eureka/
 ---
 spring:
   profiles: test

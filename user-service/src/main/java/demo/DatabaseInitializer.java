@@ -28,8 +28,8 @@ public class DatabaseInitializer {
     private PasswordEncoder passwordEncoder;
 
     public void populate() {
-        populateAuthorities();
-        populateUsers();
+        if (authorityRepository.count() == 0) populateAuthorities();
+        if (userRepository.count() == 0) populateUsers();
     }
 
     @Transactional

@@ -19,6 +19,7 @@ public class DatabaseInitializer {
 
     @Transactional
     public void populate() {
+        catalogInfoRepository.deleteAll();
         CatalogInfo catalogInfo = new CatalogInfo();
         catalogInfo.setId(0L);
         catalogInfo.setCatalogId(0L);

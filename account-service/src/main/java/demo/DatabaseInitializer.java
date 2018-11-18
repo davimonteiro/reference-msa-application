@@ -26,7 +26,7 @@ public class DatabaseInitializer {
 
     @Transactional
     public void populate() {
-
+        customerRepository.deleteAll();
         for (long i = 0; i < 1000; i++) {
             Address address1 = new Address();
             address1.setCountry("United States");

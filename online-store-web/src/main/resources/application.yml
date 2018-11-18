@@ -39,8 +39,6 @@ eureka:
 ---
 spring:
   profiles: docker
-  application:
-    name: online-store-web
 zuul:
   ignored-services: '*'
   routes:
@@ -70,3 +68,32 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka/
+---
+spring:
+  profiles: k8s
+zuul:
+  ignored-services: '*'
+  routes:
+    edge-service:
+      path: /api/**
+      url: http://${EDGE_SERVICE_IP}
+    auth-service:
+      path: /user/**
+      url: http://${UAA_IP}/uaa/user
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://${UAA_IP}/uaa/user
+    client:
+      accessTokenUri: http://${UAA_IP}/uaa/oauth/token
+      userAuthorizationUri: http://${UAA_IP}/uaa/oauth/authorize
+      client-id: acme
+      clientSecret: acmesecret
+eureka:
+  instance:
+    prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_IP}/eureka/

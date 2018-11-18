@@ -31,6 +31,13 @@ public class DatabaseInitializer {
 
     @Transactional
     public void populate() {
+        // Clear existing data
+        shipmentRepository.deleteAll();
+        warehouseRepository.deleteAll();
+        addressRepository.deleteAll();
+        catalogRepository.deleteAll();
+        inventoryRepository.deleteAll();
+
         Warehouse warehouse = new Warehouse("Pivotal SF");
 
         List<Product> products = new ArrayList<>(Arrays.asList(

@@ -57,3 +57,23 @@ spring:
 eureka:
   client:
     enabled: false
+---
+spring:
+  profiles: k8s
+  datasource:
+    url: jdbc:mysql://${MYSQL_IP}/dev
+    username: root
+    password: dbpass
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      new_generator_mappings: false
+eureka:
+  instance:
+    prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_IP}/eureka/

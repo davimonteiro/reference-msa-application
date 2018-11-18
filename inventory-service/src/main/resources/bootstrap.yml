@@ -17,10 +17,9 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-spring.profiles.active: development
 ---
 spring:
-  profiles: cloud
+  profiles: k8s
   cloud:
     config:
-      uri: ${vcap.services.config-service.credentials.uri:http://localhost:8888}
+      uri: ${CONFIG_SERVICE_URI}

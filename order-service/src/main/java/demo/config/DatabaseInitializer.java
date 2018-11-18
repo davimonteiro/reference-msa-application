@@ -66,4 +66,5 @@ public class DatabaseInitializer {
         // Save the invoice
         invoiceRepository.save(invoice);
     }
+
 }

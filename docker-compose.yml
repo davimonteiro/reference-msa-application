@@ -2,9 +2,6 @@ version: "3"
 services:
   config-service:
     image: davimonteiro/config-service
-    environment:
-    - SPRING_PROFILES_ACTIVE=docker
-    - DOCKER_IP=$DOCKER_IP
     ports:
     - 8888:8888
   hystrix-dashboard:

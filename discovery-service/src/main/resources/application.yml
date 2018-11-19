@@ -4,19 +4,6 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
----
-spring:
-  profiles: development
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    health-check-url-path: /actuator/health
-  client:
-    register-with-eureka: false
-    fetch-registry: false
----
-spring:
-  profiles: docker
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10

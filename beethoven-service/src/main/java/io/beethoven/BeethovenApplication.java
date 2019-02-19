@@ -1,7 +1,6 @@
 package io.beethoven;
 
 import akka.actor.ActorSystem;
-import io.beethoven.Beethoven;
 import io.beethoven.config.EnableBeethoven;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.jdbc.DataSourceHealthIndicatorAutoConfiguration;
@@ -33,7 +32,7 @@ public class BeethovenApplication {
 
         @Override
         public void configure(WebSecurity web) {
-            web.ignoring().antMatchers("/actuator/**");
+            web.ignoring().antMatchers("/**");
         }
 
     }

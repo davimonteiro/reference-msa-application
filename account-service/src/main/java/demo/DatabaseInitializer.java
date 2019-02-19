@@ -40,10 +40,10 @@ public class DatabaseInitializer {
             Address address2 = new Address();
             address2.setCountry("United States");
             address2.setState("CA");
-            address2.setCity("Palo Alto");
-            address2.setStreet1("3495 Deer Creek Road");
+            address2.setCity("San Francisco");
+            address2.setStreet1("12 Lombard Street");
             address2.setStreet2("");
-            address2.setZipCode(94304);
+            address2.setZipCode(84393);
             address2.setAddressType(Address.AddressType.SHIPPING);
 
             CreditCard creditCard = new CreditCard();

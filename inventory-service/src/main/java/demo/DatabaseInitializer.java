@@ -1,6 +1,8 @@
 package demo;
 
 import demo.domain.*;
+import demo.domain.Inventory.InventoryStatus;
+import demo.domain.Shipment.ShipmentStatus;
 import demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,19 +30,69 @@ public class DatabaseInitializer {
     private CatalogRepository catalogRepository;
     @Autowired
     private InventoryRepository inventoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Transactional
     public void populate() {
         // Clear existing data
+        clearExistingData();
+
+        // Create the products
+        List<Product> products = generateProducts();
+
+        productRepository.saveAll(products);
+
+        Catalog catalog = new Catalog();
+        catalog.setName("Fall Catalog");
+        catalog.setCatalogNumber(0L);
+        catalog.setProducts(products);
+        catalogRepository.save(catalog);
+
+        Address warehouseAddress = new Address("875 Howard St", null,
+                "CA", "San Francisco", "United States", 94103);
+
+        Address shipToAddress = new Address("1600 Amphitheatre Parkway", null,
+                "CA", "Mountain View", "United States", 94043);
+
+        // Save the addresses
+        addressRepository.saveAll(Arrays.asList(warehouseAddress, shipToAddress));
+
+        Warehouse warehouse = new Warehouse("Pivotal SF");
+        warehouse.setAddress(warehouseAddress);
+        warehouse = warehouseRepository.save(warehouse);
+        Warehouse finalWarehouse = warehouse;
+
+        // Generate 1000 extra inventory for each product
+        for (long i = 0; i < 1000; i++) {
+            // Create a new set of inventories with a randomized inventory number
+            Set<Inventory> inventories = products.stream()
+                    .map(a -> new Inventory(IntStream.range(0, 9)
+                            .mapToObj(x -> Integer.toString(new Random().nextInt(9)))
+                            .collect(Collectors.joining("")), a, finalWarehouse, InventoryStatus.IN_STOCK))
+                    .collect(Collectors.toSet());
+
+            inventoryRepository.saveAll(inventories);
+
+            Shipment shipment = new Shipment(inventories, shipToAddress,
+                    warehouse, ShipmentStatus.SHIPPED);
+
+            shipmentRepository.save(shipment);
+        }
+
+    }
+
+    private void clearExistingData() {
         shipmentRepository.deleteAll();
         warehouseRepository.deleteAll();
         addressRepository.deleteAll();
         catalogRepository.deleteAll();
         inventoryRepository.deleteAll();
+        productRepository.deleteAll();
+    }
 
-        Warehouse warehouse = new Warehouse("Pivotal SF");
-
-        List<Product> products = new ArrayList<>(Arrays.asList(
+    private List<Product> generateProducts() {
+        return new ArrayList<>(Arrays.asList(
 
                 new Product("Best. Cloud. Ever. (T-Shirt, Men's Large)", "SKU-24642", "<p>Do you love your cloud platform? " +
                         "Do you push code continuously into production on a daily basis? " +
@@ -69,47 +121,6 @@ public class DatabaseInitializer {
                                 "comfortable and casual. <br /><br />&nbsp; <strong>Cloud Native PaaS Collection</strong><br />" +
                                 "&nbsp; 10% cloud stuff, 90% platform nylon<br />&nbsp; Cloud wash safe<br />" +
                                 "&nbsp; Five nines of <em>comfortability</em></p>", 21.99)));
-
-        //productRepository.save(products);
-        Catalog catalog = new Catalog();
-        catalog.setName("Fall Catalog");
-        catalog.setCatalogNumber(0L);
-        catalog.setProducts(products);
-        catalogRepository.save(catalog);
-
-        Address warehouseAddress = new Address("875 Howard St", null,
-                "CA", "San Francisco", "United States", 94103);
-
-        Address shipToAddress = new Address("1600 Amphitheatre Parkway", null,
-                "CA", "Mountain View", "United States", 94043);
-
-        // Save the addresses
-        addressRepository.saveAll(Arrays.asList(warehouseAddress, shipToAddress));
-        warehouse.setAddress(warehouseAddress);
-        warehouse = warehouseRepository.save(warehouse);
-        Warehouse finalWarehouse = warehouse;
-
-        // Create a new set of inventories with a randomized inventory number
-        Set<Inventory> inventories = products.stream()
-                .map(a -> new Inventory(IntStream.range(0, 9)
-                        .mapToObj(x -> Integer.toString(new Random().nextInt(9)))
-                        .collect(Collectors.joining("")), a, finalWarehouse, Inventory.InventoryStatus.IN_STOCK))
-                .collect(Collectors.toSet());
-
-        inventoryRepository.saveAll(inventories);
-
-        // Generate 1000 extra inventory for each product
-        for (long i = 0; i < 1000; i++) {
-            inventoryRepository.saveAll(products.stream()
-                    .map(a -> new Inventory(IntStream.range(0, 9)
-                            .mapToObj(x -> Integer.toString(new Random().nextInt(9)))
-                            .collect(Collectors.joining("")), a, finalWarehouse, Inventory.InventoryStatus.IN_STOCK))
-                    .collect(Collectors.toSet()));
-        }
-
-        Shipment shipment = new Shipment(inventories, shipToAddress,
-                warehouse, Shipment.ShipmentStatus.SHIPPED);
-
-        shipmentRepository.save(shipment);
     }
+
 }

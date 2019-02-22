@@ -31,6 +31,3 @@ contentApp.config(['$routeProvider',
             redirectTo: '/'
         });
     }]);
-
-
-

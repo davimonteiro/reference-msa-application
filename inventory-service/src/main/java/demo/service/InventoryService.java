@@ -1,8 +1,7 @@
-package demo.v1;
+package demo.service;
 
 
 import demo.domain.*;
-import demo.repository.CatalogRepository;
 import demo.repository.InventoryRepository;
 import demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +21,20 @@ import static java.util.stream.Collectors.groupingBy;
 
 
 /**
- * The {@link InventoryServiceV1} class provides services to retrieve products and verify available inventory.
+ * The {@link InventoryService} class provides services to retrieve products and verify available inventory.
  *
  * @author Kenny Bastani
  * @author Josh Long
  * @author Davi Monteiro
  */
 @Service
-public class InventoryServiceV1 {
+public class InventoryService {
 
     @Autowired
     private InventoryRepository inventoryRepository;
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private CatalogRepository catalogRepository;
 
     @Transactional(readOnly = true)
     public Product getProduct(String productId) {
@@ -53,8 +49,8 @@ public class InventoryServiceV1 {
     }
 
     @Transactional(readOnly = true)
-    public ShoppingCart checkAvailableInventory(ShoppingCart currentCart) throws Exception {
-        List<Inventory> inventoryList = getAvailableInventoryForProductIds(currentCart);
+    public ShoppingCart checkAvailability(ShoppingCart currentCart) throws Exception {
+        List<Inventory> inventoryList = getInventoryByShoppingCart(currentCart);
 
         Map<String, Long> inventoryItems = inventoryList
                 .stream()
@@ -78,16 +74,16 @@ public class InventoryServiceV1 {
         return currentCart;
     }
 
-    public List<Inventory> getAvailableInventoryForProductIds(ShoppingCart shoppingCart) {
-        List<String> ids = shoppingCart.getLineItems().stream().map(item -> item.getProductId()).collect(Collectors.toList());
-        List<Inventory> inventoryList = getInventories(ids);
-        return inventoryList;
+    public List<Inventory> getInventoryByShoppingCart(ShoppingCart shoppingCart) {
+        List<String> ids = shoppingCart.getLineItems().stream()
+                .map(item -> item.getProductId())
+                .collect(Collectors.toList());
+        return getInventories(ids);
     }
 
-    public List<Inventory> getAvailableInventoryForProductIds(String productIds) {
+    public List<Inventory> getInventoryByShoppingCart(String productIds) {
         String[] ids = productIds.split(",");
-        List<Inventory> inventoryList = getInventories(Arrays.asList(ids));
-        return inventoryList;
+        return getInventories(Arrays.asList(ids));
     }
 
     private List<Inventory> getInventories(List<String> productIds) {
@@ -102,13 +98,6 @@ public class InventoryServiceV1 {
         }
 
         return inventoryList;
-    }
-
-    @Transactional(readOnly = true)
-    public Catalog findCatalogByCatalogNumber(Long catalogNumber) {
-        Catalog catalog = catalogRepository.findCatalogByCatalogNumber(catalogNumber);
-        catalog.setProducts(productRepository.findAll());
-        return catalog;
     }
 
 }

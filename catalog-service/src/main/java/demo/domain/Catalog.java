@@ -1,29 +1,34 @@
 package demo.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 /**
- * The {@link Catalog} class is responsible for storing information about a specific catalog.
+ * A simple {@link Catalog} entity for a catalog.
  *
  * @author Kenny Bastani
  * @author Josh Long
  * @author Davi Monteiro
  */
-@Data
+@Entity
+@Getter @Setter @ToString
 public class Catalog {
 
+    @Id @GeneratedValue
     private Long id;
-    private Long catalogNumber;
-    private Set<Product> products = new HashSet<>();
     private String name;
-
-    public Catalog() { }
-
-    public Catalog(String name) {
-        this.name = name;
-    }
+    private Long catalogNumber;
+    @OneToMany(mappedBy = "catalog", cascade = ALL)
+    private List<Product> products = new ArrayList<>();
 
 }

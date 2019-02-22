@@ -91,7 +91,7 @@ contentApp.factory('orderService', function () {
 
 contentApp.controller('ProductListCtrl', ['$scope', '$http', '$templateCache',
     function ($scope, $http, $templateCache) {
-        $scope.url = '/api/catalog/v1/catalog';
+        $scope.url = '/api/catalogs';
         $scope.products = [];
 
         var fetchProducts = function () {
@@ -102,6 +102,7 @@ contentApp.controller('ProductListCtrl', ['$scope', '$http', '$templateCache',
             }).success(function (data) {
                 $scope.products = data.products;
             }).error(function (data, status, headers, config) {
+                console.log('Error: ' + data);
             });
         };
 
@@ -120,6 +121,7 @@ contentApp.controller('AccountCtrl', ['$scope', '$http', '$templateCache',
             }).success(function (data) {
                 $scope.accounts = data;
             }).error(function (data, status, headers, config) {
+                console.log('Error: ' + data);
             });
         };
 
@@ -190,7 +192,7 @@ contentApp.controller('HeaderCtrl', ['$scope', '$http',
                 });
                 $scope.user = data;
             }).error(function (data, status, headers, config) {
-                scope.user = {};
+                $scope.user = {};
             });
         };
 

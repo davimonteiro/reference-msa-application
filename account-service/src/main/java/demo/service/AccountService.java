@@ -1,4 +1,4 @@
-package demo.api.v1;
+package demo.service;
 
 import demo.domain.Account;
 import demo.domain.User;
@@ -12,14 +12,14 @@ import java.util.List;
 
 
 /**
- * The {@link AccountServiceV1} class provides a service to retrieve user accounts from the current user.
+ * The {@link AccountService} class provides a service to retrieve user accounts from the current user.
  *
  * @author Kenny Bastani
  * @author Josh Long
  * @author Davi Monteiro
  */
 @Service
-public class AccountServiceV1 {
+public class AccountService {
 
     @Autowired
     private AccountRepository accountRepository;

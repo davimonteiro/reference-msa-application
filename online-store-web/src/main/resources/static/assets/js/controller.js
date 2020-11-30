@@ -190,7 +190,9 @@ contentApp.controller('HeaderCtrl', ['$scope', '$http',
                 });
                 $scope.user = data;
             }).error(function (data, status, headers, config) {
-                scope.user = {};
+                $scope.user = {};
+                console.log('Error during fetchUser.');
+                console.log(data);
             });
         };
 

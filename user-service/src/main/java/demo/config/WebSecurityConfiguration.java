@@ -16,7 +16,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 
 
 @Configuration
-@EnableWebSecurity//(debug = true)
+@EnableWebSecurity(debug = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired

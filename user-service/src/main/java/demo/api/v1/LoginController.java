@@ -65,7 +65,7 @@ public class LoginController {
                     .setAuthentication(authenticationManager.authenticate(auth));
 
             // Authenticate the user
-            if(!authenticationManager.authenticate(auth).isAuthenticated())
+            if (!authenticationManager.authenticate(auth).isAuthenticated())
                 throw new CredentialException("User could not be authenticated");
 
         } catch (Exception ex) {
@@ -92,6 +92,7 @@ public class LoginController {
 
     /**
      * Generate an authorization parameter map from the session's token request
+     *
      * @param defaultSavedRequest the default saved request from the session
      * @return a map of parameters containing the OAuth2 request details
      */
@@ -104,7 +105,7 @@ public class LoginController {
         authParams.put(OAuth2Utils.REDIRECT_URI,
                 defaultSavedRequest.getParameterMap().get(OAuth2Utils.REDIRECT_URI)[0]);
 
-        if(defaultSavedRequest.getParameterMap().get(OAuth2Utils.STATE) != null) {
+        if (defaultSavedRequest.getParameterMap().get(OAuth2Utils.STATE) != null) {
             authParams.put(OAuth2Utils.STATE,
                     defaultSavedRequest.getParameterMap().get(OAuth2Utils.STATE)[0]);
         }
